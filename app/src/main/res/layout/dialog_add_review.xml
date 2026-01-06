@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rate this event"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- THIS IS THE FIX FOR THE STAR COLOR -->
+    <RatingBar
+        android:id="@+id/dialog_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:progressTint="@color/yellow"
+        android:secondaryProgressTint="@color/light_gray"
+        android:progressBackgroundTint="@color/light_gray"
+        android:layout_marginBottom="16dp"/>
+    <!-- END OF FIX -->
+
+    <EditText
+        android:id="@+id/et_review_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Write your comment..."
+        android:minLines="3"
+        android:gravity="top"/>
+
+</LinearLayout>
