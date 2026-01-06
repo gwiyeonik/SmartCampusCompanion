@@ -42,14 +42,18 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                android:id="@+id/calendarView"
+            <!-- THIS IS THE FIX: Using the new Applandeo CalendarView attributes -->
+            <com.applandeo.materialcalendarview.CalendarView
+                android:id="@+id/calendar_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                app:mcv_selectionColor="#1B5E20"
-                app:mcv_showOtherDates="all" />
+                app:headerColor="#3c7962"
+                app:todayLabelColor="#D32F2F"
+                app:selectionColor="#77bba2"
+                app:anotherMonthsDaysLabelsColor="@color/light_gray" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_events"

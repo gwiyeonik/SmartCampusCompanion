@@ -3,8 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="purple_700">#FF3700B3</color>
+    <!-- Colors for your app's theme -->
+    <color name="light_green_brand">#e0fcf2</color> <!-- This will be your new status bar color -->
+    <color name="dark_green_brand">#1B5E20</color>
+    <color name="custom_green_brand">#457B65</color>
 
-
-
+    <!-- Other colors you use -->
+    <color name="yellow">#FFC107</color>
+    <color name="light_gray">#D3D3D3</color>
 </resources>
