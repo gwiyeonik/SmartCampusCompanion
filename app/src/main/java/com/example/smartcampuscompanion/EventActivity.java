@@ -177,7 +177,7 @@ public class EventActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                new AlertDialog.Builder(this, R.style.MaterialAlertDialog_Green)
+                new AlertDialog.Builder(this, R.style.MaterialAlertDialog_Delete)
                         .setTitle("Logout")
                         .setMessage("Are you sure you want to log out?")
                         .setPositiveButton("Logout", (dialog, which) -> {

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_chat) {
                 // Navigate to ChatActivity
             } else if (itemId == R.id.nav_profile) {
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(this, R.style.MaterialAlertDialog_Delete)
                         .setTitle("Logout")
                         .setMessage("Are you sure you want to log out?")
                         .setPositiveButton("Logout", (dialog, which) -> {
