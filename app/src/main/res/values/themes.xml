@@ -30,4 +30,13 @@
         <item name="colorSecondary">@color/red</item>  <!-- Optional: Color for negative button text -->
     </style>
 
+    <style name="MaterialAlertDialog.Delete" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- Sets the button text color to your dark green brand color -->
+        <item name="colorPrimary">@color/custom_green_brand</item>
+        <!-- Background of the dialog box (usually white in light mode) -->
+        <item name="colorSurface">@android:color/white</item>
+        <!-- Text color for title and message -->
+        <item name="colorOnSurface">@android:color/black</item>
+    </style>
+
 </resources>
