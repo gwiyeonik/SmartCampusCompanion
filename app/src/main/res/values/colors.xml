@@ -11,4 +11,6 @@
     <!-- Other colors you use -->
     <color name="yellow">#FFC107</color>
     <color name="light_gray">#D3D3D3</color>
+    <color name="red">#C80815</color>
+
 </resources>

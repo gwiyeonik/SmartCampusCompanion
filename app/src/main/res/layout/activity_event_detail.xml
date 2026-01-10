@@ -30,10 +30,12 @@
 
             <TextView
                 android:id="@+id/tv_event_detail_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="24dp"
+                android:gravity="center"
                 android:textColor="#1B5E20"
+                android:layout_marginTop="20dp"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -43,12 +45,13 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp">
 
-            <ImageView
-                android:id="@+id/iv_event_detail_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter" />
+                <ImageView
+                    android:id="@+id/iv_event_detail_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter" />
+
 
             <Button
                 android:id="@+id/btn_location"
@@ -108,6 +111,15 @@
                 android:layout_marginTop="8dp"
                 android:paddingHorizontal="16dp"
                 android:clipToPadding="false" />
+
+            <TextView
+                android:id="@+id/tv_no_images"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Images not available"
+                android:gravity="center"
+                android:padding="16dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/btn_open_review_dialog"

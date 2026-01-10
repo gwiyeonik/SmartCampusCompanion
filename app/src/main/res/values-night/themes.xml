@@ -1,9 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.SmartCampusCompanion" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/dark_green_brand</item>
+        <item name="android:statusBarColor">@color/custom_green_brand</item>
         <!-- Customize your dark theme here. -->
         <item name="android:windowBackground">@color/custom_green_brand</item>
         <item name="colorPrimary">@color/light_green_brand</item>
+        <item name="colorOnSurface">@color/light_green_brand</item>
     </style>
+
+    <style name="MaterialAlertDialog.Delete" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- This forces the button text to be white or light green -->
+        <item name="colorPrimary">@color/light_green_brand</item>
+        <!-- This ensures the title and message text are also white for contrast -->
+        <item name="colorOnSurface">@color/black</item>
+    </style>
+
 </resources>

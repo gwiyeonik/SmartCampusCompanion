@@ -54,6 +54,16 @@
                 app:selectionColor="#77bba2"
                 app:anotherMonthsDaysLabelsColor="@color/light_gray" />
 
+            <Button
+                android:id="@+id/btn_view_all_upcoming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="View All Events"
+                android:textColor="@color/white"
+                android:backgroundTint="#3c7962"/>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_events"

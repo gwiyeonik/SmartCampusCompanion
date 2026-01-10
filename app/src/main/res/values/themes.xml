@@ -22,4 +22,12 @@
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/dark_green_brand</item>
     </style>
+
+    <style name="MaterialAlertDialog.Green" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!-- This sets the color for the positive ("OK", "Yes") and negative ("No") buttons -->
+        <item name="colorOnSurface">@android:color/black</item> <!-- Text color for title and message -->
+        <item name="colorPrimary">@color/dark_green_brand</item> <!-- Color for positive button text -->
+        <item name="colorSecondary">@color/red</item>  <!-- Optional: Color for negative button text -->
+    </style>
+
 </resources>
