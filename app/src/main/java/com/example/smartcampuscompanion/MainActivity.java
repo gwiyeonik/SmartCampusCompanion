@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         setupRecyclerViews();
-        fetchAndFilterEvents(); // Now handles both sections
 
         LinearLayout newsInfoButton = findViewById(R.id.btn_news_info);
         newsInfoButton.setOnClickListener(v -> {
@@ -74,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
         thisWeekRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         thisWeekAdapter = new HorizontalEventAdapter(this, thisWeekList);
         thisWeekRecyclerView.setAdapter(thisWeekAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchAndFilterEvents();
     }
 
     private void fetchAndFilterEvents() {

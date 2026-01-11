@@ -59,6 +59,7 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
     private ImageButton ibAddMainImage, ibExtra1, ibExtra2, ibExtra3;
     private Button btnCreateEvent;
     private ImageView ivBackArrow;
+    private android.app.ProgressDialog progressDialog;
 
     // Map Elements
     private MapView mapPicker;
@@ -211,6 +212,10 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
 
     private void uploadAllImagesAndSaveData(String userId) {
         btnCreateEvent.setEnabled(false);
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Uploading images and creating event... Please wait.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         StorageReference storageRef = storage.getReference().child("event_images");
         Map<String, Uri> allUris = new HashMap<>();
         allUris.put("main", mainImageUri);
@@ -267,9 +272,22 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
         Task<Void> t1 = newsRef.set(newsData);
         Task<Void> t2 = db.collection("event").document(sharedId).set(eventData);
 
+        // 4. Wait for both operations to finish
         Tasks.whenAll(t1, t2).addOnSuccessListener(v -> {
-            Toast.makeText(this, "Created!", Toast.LENGTH_SHORT).show();
+            // Dismiss dialog before finishing
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            Toast.makeText(this, "Event Created Successfully!", Toast.LENGTH_SHORT).show();
             finish();
+        }).addOnFailureListener(e -> {
+            // Dismiss dialog on error so user can fix issues
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            btnCreateEvent.setEnabled(true);
+            Log.e(TAG, "Error saving to Firestore", e);
+            Toast.makeText(this, "Save Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
         });
     }
 

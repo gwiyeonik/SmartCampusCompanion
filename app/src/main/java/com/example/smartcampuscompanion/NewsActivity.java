@@ -49,8 +49,11 @@ public class NewsActivity extends AppCompatActivity {
         setupRecyclerViews();
         setupCategoryClicks();
         setupBottomNavigation();
+    }
 
-        // Fetch everything from the main "event" collection
+    @Override
+    protected void onResume() {
+        super.onResume();
         fetchAndFilterEvents();
     }
 
