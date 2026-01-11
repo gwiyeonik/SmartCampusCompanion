@@ -86,6 +86,14 @@ public class UpdateActivity extends AppCompatActivity implements OnMapReadyCallb
         initializeImagePicker();
         setupClickListeners();
 
+        etDesc.setOnTouchListener((v, event) -> {
+            if (v.getId() == R.id.et_event_description) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+            return false;
+        });
+
         if (eventId != null) loadEventData();
     }
 
@@ -307,15 +315,26 @@ public class UpdateActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void showDeleteDialog() {
         new AlertDialog.Builder(this, R.style.MaterialAlertDialog_Delete)
-                .setTitle("Delete?")
-                .setMessage("Do you want to remove this additional image?")
-                .setPositiveButton("Yes", (d, w) -> {
-                    db.collection("newsandinformation").document(eventId).delete();
-                    db.collection("event").document(eventId).delete().addOnSuccessListener(v -> finish());
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+                .setTitle("Delete Event")
+                .setMessage("Are you sure you want to permanently delete this event?")
+                .setPositiveButton("DELETE", (dialog, which) -> {
+                    Task<Void> d1 = db.collection("newsandinformation").document(eventId).delete();
+                    Task<Void> d2 = db.collection("event").document(eventId).delete();
 
+                    Tasks.whenAll(d1, d2).addOnSuccessListener(v -> {
+                        Toast.makeText(this, "Event Deleted Successfully", Toast.LENGTH_SHORT).show();
+
+                        // --- ADD THIS LINE ---
+                        // Signal to EventDetailActivity that the item was deleted
+                        setResult(99);
+
+                        finish(); // Closes UpdateActivity
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error deleting: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+                })
+                .setNegativeButton("CANCEL", null)
+                .show();
     }
 
     @Override protected void onResume() { super.onResume(); mapPicker.onResume(); }

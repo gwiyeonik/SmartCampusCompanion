@@ -18,6 +18,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -70,6 +72,19 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     private MapView mapView;
     private com.google.android.gms.location.FusedLocationProviderClient fusedLocationClient;
     private GoogleMap googleMap;
+
+    private final ActivityResultLauncher<Intent> updateLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                // 2. If the result code is 99, it means the event was deleted
+                if (result.getResultCode() == 99) {
+                    finish(); // Close this Detail activity automatically
+                } else {
+                    // Otherwise, just refresh the data (in case they just updated it)
+                    loadEventDetails();
+                }
+            }
+    );
     // --- END OF FIX ---
 
     @Override
@@ -172,13 +187,15 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         });
         btnOpenReview.setOnClickListener(v -> showAddReviewDialog());
         fabEditEvent.setOnClickListener(v -> {
-            // 1. Point the Intent to the correct UpdateActivity
+            // 1. Point the Intent to UpdateActivity
             Intent intent = new Intent(this, UpdateActivity.class);
 
-            // 2. Pass the event ID with the correct key that UpdateActivity expects
+            // 2. Pass the event ID
             intent.putExtra("EVENT_ID_TO_UPDATE", eventId);
 
-            startActivity(intent);
+            // 3. CRITICAL: Use launch() instead of startActivity()
+            // This allows this activity to "listen" for the delete signal (result code 99)
+            updateLauncher.launch(intent);
         });
 
     }

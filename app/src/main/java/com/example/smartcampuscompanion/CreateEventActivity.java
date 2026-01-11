@@ -93,6 +93,14 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
         mapPicker.onCreate(savedInstanceState);
         mapPicker.getMapAsync(this);
 
+        etEventDescription.setOnTouchListener((v, event) -> {
+            if (v.getId() == R.id.et_event_description) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+            return false;
+        });
+
         initializeImagePicker();
         setupClickListeners();
     }
@@ -242,7 +250,7 @@ public class CreateEventActivity extends AppCompatActivity implements OnMapReady
         Map<String, Object> newsData = new HashMap<>();
         newsData.put("organizerId", userId);
         newsData.put("title", title);
-        newsData.put("registrationLink", etGoogleFormLink.getText().toString());
+        newsData.put("googleForm", etGoogleFormLink.getText().toString());
         newsData.put("description", etEventDescription.getText().toString());
         newsData.put("imageUrl", urls.get("main"));
 
