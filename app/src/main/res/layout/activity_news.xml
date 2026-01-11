@@ -113,30 +113,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Happening Section -->
-            <TextView
-                android:id="@+id/tv_happening"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="HAPPENING"
-                android:textColor="#1B5E20"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- *** REPLACED WITH RECYCLERVIEW *** -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_happening"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_horizontal_event" />
-
             <!-- This Week Section -->
             <TextView
                 android:id="@+id/tv_this_week"
@@ -152,6 +128,29 @@
             <!-- *** REPLACED WITH RECYCLERVIEW *** -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_this_week"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_horizontal_event" />
+            <!-- Happening Section -->
+            <TextView
+                android:id="@+id/tv_happening"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="THIS MONTH"
+                android:textColor="#1B5E20"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- *** REPLACED WITH RECYCLERVIEW *** -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_happening"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

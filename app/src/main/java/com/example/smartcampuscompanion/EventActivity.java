@@ -106,6 +106,11 @@ public class EventActivity extends AppCompatActivity {
                             // Add a dot to the calendar
                             calendarEventDays.add(new EventDay(calendar, R.drawable.ic_dot));
                         }
+                        if (d2 != null) {
+                            Calendar cal2 = Calendar.getInstance();
+                            cal2.setTime(d2);
+                            calendarEventDays.add(new EventDay(cal2, R.drawable.ic_dot));
+                        }
                     }
 
                     calendarView.setEvents(calendarEventDays);
