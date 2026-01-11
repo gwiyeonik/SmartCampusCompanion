@@ -127,10 +127,13 @@
 
                 <!-- Safety & Emergency -->
                 <LinearLayout
+                    android:id="@+id/btn_safety_emergency"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical">
 
                     <ImageView

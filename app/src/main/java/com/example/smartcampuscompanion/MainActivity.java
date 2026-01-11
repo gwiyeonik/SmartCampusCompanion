@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,6 +60,18 @@ public class MainActivity extends AppCompatActivity {
         newsInfoButton.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, NewsActivity.class));
         });
+
+        LinearLayout btnSafetyEmergency = findViewById(R.id.btn_safety_emergency);
+
+        btnSafetyEmergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(
+                        new Intent(MainActivity.this, SafetyEmergencyActivity.class)
+                );
+            }
+        });
+
 
         setupBottomNavigation();
     }
