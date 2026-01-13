@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +46,27 @@
             android:exported="false" />
         <activity
             android:name=".NewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LostFoundActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LostItemsListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddLostItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LostItemDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FoundItemsListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddFoundItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FoundItemDetailActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
