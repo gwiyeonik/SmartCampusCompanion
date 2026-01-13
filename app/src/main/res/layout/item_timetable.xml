@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#e0fcf2"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/tv_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject Name"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/tv_day_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monday | 10:00 - 12:00"
+        android:textSize="14sp"
+        android:textColor="#444444"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Room A1"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_marginTop="2dp" />
+
+    <!-- NAVIGATION ACTION -->
+    <TextView
+        android:id="@+id/tv_navigate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Navigate"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#3c7962"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

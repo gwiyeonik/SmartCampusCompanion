@@ -67,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, NewsActivity.class));
         });
 
+        // Class & Event button
+        LinearLayout classEventButton = findViewById(R.id.btn_class_event);
+        classEventButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ClassEventActivity.class);
+            startActivity(intent);
+        });
+
+
         // Setup Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_home);

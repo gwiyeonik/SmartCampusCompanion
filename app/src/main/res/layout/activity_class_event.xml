@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="139dp"
+                android:background="#e0fcf2"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="280dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/smart_campus_logo"
+                    android:contentDescription="@string/app_logo" />
+            </LinearLayout>
+
+            <!-- MENU GRADIENT -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/menu_background_gradient"
+                android:orientation="horizontal"
+                android:padding="24dp">
+
+                <!-- TIMETABLE -->
+                <LinearLayout
+                    android:id="@+id/btn_timetable"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/timetable"
+                        android:contentDescription="Timetable" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="TIMETABLE"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:textColor="#0d522c" />
+                </LinearLayout>
+
+                <!-- EVENT SCHEDULER -->
+                <LinearLayout
+                    android:id="@+id/btn_event_scheduler"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/event"
+                        android:contentDescription="Event Scheduler" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="EVENT SCHEDULER"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:textColor="#0d522c" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- TODAY CLASSES TITLE -->
+            <TextView
+                android:id="@+id/tv_today_classes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Today's Classes"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="#2E5E4E"
+                android:padding="12dp" />
+
+            <!-- TODAY CLASSES LIST -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_today_timetable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BOTTOM NAVIGATION -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#3c7962"
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/bottom_navigation_menu" />
+
+</RelativeLayout>

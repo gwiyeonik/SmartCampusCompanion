@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="139dp"
+        android:background="#e0fcf2"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="280dp"
+            android:layout_height="100dp"
+            android:src="@drawable/smart_campus_logo"
+            android:contentDescription="@string/app_logo"/>
+    </LinearLayout>
+
+    <!-- TITLE BAR -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:background="@drawable/menu_background_gradient"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="EVENT SCHEDULER"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <!-- EMPTY STATE -->
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:gravity="center"
+        android:padding="24dp"
+        android:text="No scheduled events yet"
+        android:textColor="#777777"
+        android:visibility="gone"/>
+
+    <!-- LIST -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_events"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_title"
+        android:padding="12dp" />
+
+    <!-- ADD EVENT (NORMAL BUTTON, not FAB) -->
+    <Button
+        android:id="@+id/btn_add_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="12dp"
+        android:backgroundTint="#3c7962"
+        android:text="Add Scheduled Event"
+        android:textColor="@android:color/white"/>
+</RelativeLayout>

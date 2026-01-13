@@ -43,6 +43,29 @@
         <activity
             android:name=".NewsActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ClassEventActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".TimetableListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AddTimetableActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".EventSchedulerListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AddScheduledEventActivity"
+            android:exported="false" />
+
+
+
         <activity
             android:name=".LoginActivity"
             android:exported="true">
