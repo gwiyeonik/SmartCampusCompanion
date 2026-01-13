@@ -15,14 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -32,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private FirebaseFirestore db;
 
-    private RecyclerView urgentItemsRecyclerView;
-    private LostFoundAdapter urgentItemsAdapter;
-    private List<LostFoundItem> urgentItemsList = new ArrayList<>();
+    private RecyclerView happeningRecyclerView;
+    private HorizontalEventAdapter happeningAdapter;
+    private List<HorizontalEventModel> happeningList = new ArrayList<>();
 
     private RecyclerView thisWeekRecyclerView;
     private HorizontalEventAdapter thisWeekAdapter;
@@ -63,35 +61,27 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, NewsActivity.class));
         });
 
-        LinearLayout lostFoundButton = findViewById(R.id.btn_lost_found);
-        lostFoundButton.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, LostFoundActivity.class));
+        LinearLayout btnSafetyEmergency = findViewById(R.id.btn_safety_emergency);
+
+        btnSafetyEmergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(
+                        new Intent(MainActivity.this, SafetyEmergencyActivity.class)
+                );
+            }
         });
+
 
         setupBottomNavigation();
     }
 
     private void setupRecyclerViews() {
-        // Urgent Items RecyclerView
-        urgentItemsRecyclerView = findViewById(R.id.recycler_view_happening);
-        urgentItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        urgentItemsAdapter = new LostFoundAdapter(urgentItemsList);
-        urgentItemsRecyclerView.setAdapter(urgentItemsAdapter);
+        happeningRecyclerView = findViewById(R.id.recycler_view_happening);
+        happeningRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        happeningAdapter = new HorizontalEventAdapter(this, happeningList);
+        happeningRecyclerView.setAdapter(happeningAdapter);
 
-        urgentItemsAdapter.setOnItemClickListener(position -> {
-            LostFoundItem item = urgentItemsList.get(position);
-            if ("lost".equals(item.getItemType())) {
-                Intent intent = new Intent(MainActivity.this, LostItemDetailActivity.class);
-                intent.putExtra("documentId", item.getDocumentId());
-                startActivity(intent);
-            } else if ("found".equals(item.getItemType())) {
-                Intent intent = new Intent(MainActivity.this, FoundItemDetailActivity.class);
-                intent.putExtra("documentId", item.getDocumentId());
-                startActivity(intent);
-            }
-        });
-
-        // This Week RecyclerView
         thisWeekRecyclerView = findViewById(R.id.recycler_view_this_week);
         thisWeekRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         thisWeekAdapter = new HorizontalEventAdapter(this, thisWeekList);
@@ -101,106 +91,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchUrgentItems();
         fetchAndFilterEvents();
     }
 
-    private void fetchUrgentItems() {
-        urgentItemsList.clear();
-
-        // Fetch urgent lost items
-        db.collection("lost_items")
-                .whereEqualTo("urgent", true)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        try {
-                            Boolean isUrgent = doc.getBoolean("urgent");
-                            LostFoundItem item = new LostFoundItem(
-                                    doc.getString("imageUrl"),
-                                    doc.getString("name"),
-                                    doc.getString("location"),
-                                    doc.getString("date"),
-                                    isUrgent != null && isUrgent,
-                                    "lost"
-                            );
-                            item.setDocumentId(doc.getId());
-                            urgentItemsList.add(item);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error parsing urgent lost item document: " + doc.getId(), e);
-                        }
-                    }
-                    sortAndRefreshUrgentItems();
-                });
-
-        // Fetch urgent found items
-        db.collection("found_items")
-                .whereEqualTo("urgent", true)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        try {
-                            Boolean isUrgent = doc.getBoolean("urgent");
-                            LostFoundItem item = new LostFoundItem(
-                                    doc.getString("imageUrl"),
-                                    doc.getString("name"),
-                                    doc.getString("location"),
-                                    doc.getString("date"),
-                                    isUrgent != null && isUrgent,
-                                    "found"
-                            );
-                            item.setDocumentId(doc.getId());
-                            urgentItemsList.add(item);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error parsing urgent found item document: " + doc.getId(), e);
-                        }
-                    }
-                    sortAndRefreshUrgentItems();
-                });
-    }
-
-    private void sortAndRefreshUrgentItems() {
-        Collections.sort(urgentItemsList, (o1, o2) -> {
-            try {
-                Date date1 = sdf.parse(o1.getDate());
-                Date date2 = sdf.parse(o2.getDate());
-                return date2.compareTo(date1); // Sort in descending order (newest first)
-            } catch (ParseException e) {
-                return 0;
-            }
-        });
-        urgentItemsAdapter.notifyDataSetChanged();
-    }
-
     private void fetchAndFilterEvents() {
-        // Pointing to the main "event" collection for This Week section
+        // Pointing to the main "event" collection
         db.collection("event").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            happeningList.clear();
             thisWeekList.clear();
 
             Calendar now = Calendar.getInstance();
             int currentWeek = now.get(Calendar.WEEK_OF_YEAR);
+            int currentMonth = now.get(Calendar.MONTH);
             int currentYear = now.get(Calendar.YEAR);
 
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                try {
-                    HorizontalEventModel event = document.toObject(HorizontalEventModel.class);
-                    event.setEventId(document.getId());
+                HorizontalEventModel event = document.toObject(HorizontalEventModel.class);
+                event.setEventId(document.getId());
 
-                    String d1 = document.getString("date1");
-                    String d2 = document.getString("date2");
+                String d1 = document.getString("date1");
+                String d2 = document.getString("date2");
 
-                    // Process first date
-                    filterByDate(event, d1, currentWeek, currentYear);
+                // Process first date
+                filterByDate(event, d1, currentWeek, currentMonth, currentYear);
 
-                    // Process second date if it exists
-                    if (d2 != null && !d2.isEmpty()) {
-                        filterByDate(event, d2, currentWeek, currentYear);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Error parsing event document: " + document.getId(), e);
+                // Process second date if it exists
+                if (d2 != null && !d2.isEmpty()) {
+                    filterByDate(event, d2, currentWeek, currentMonth, currentYear);
                 }
             }
 
+            happeningAdapter.notifyDataSetChanged();
             thisWeekAdapter.notifyDataSetChanged();
 
         }).addOnFailureListener(e -> {
@@ -209,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void filterByDate(HorizontalEventModel event, String dateStr, int curWeek, int curYear) {
+    private void filterByDate(HorizontalEventModel event, String dateStr, int curWeek, int curMonth, int curYear) {
         if (dateStr == null || dateStr.isEmpty()) return;
 
         try {
@@ -218,6 +139,13 @@ public class MainActivity extends AppCompatActivity {
             cal.setTime(date);
 
             boolean isSameYear = cal.get(Calendar.YEAR) == curYear;
+
+            // "Happening" = This Month
+            if (isSameYear && cal.get(Calendar.MONTH) == curMonth) {
+                if (!happeningList.contains(event)) {
+                    happeningList.add(event);
+                }
+            }
 
             // "This Week" = Current Calendar Week
             if (isSameYear && cal.get(Calendar.WEEK_OF_YEAR) == curWeek) {
