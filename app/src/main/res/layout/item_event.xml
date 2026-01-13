@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
-            <!-- END OF FIX -->
+            android:background="#F5F5F5" />
+
 
         <TextView
             android:id="@+id/tv_event_name"

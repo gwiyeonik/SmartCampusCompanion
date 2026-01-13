@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -43,29 +46,27 @@
         <activity
             android:name=".NewsActivity"
             android:exported="false" />
-
         <activity
-            android:name=".ClassEventActivity"
+            android:name=".LostFoundActivity"
             android:exported="false" />
-
         <activity
-            android:name=".TimetableListActivity"
+            android:name=".LostItemsListActivity"
             android:exported="false" />
-
         <activity
-            android:name=".AddTimetableActivity"
+            android:name=".AddLostItemActivity"
             android:exported="false" />
-
         <activity
-            android:name=".EventSchedulerListActivity"
+            android:name=".LostItemDetailActivity"
             android:exported="false" />
-
         <activity
-            android:name=".AddScheduledEventActivity"
+            android:name=".FoundItemsListActivity"
             android:exported="false" />
-
-
-
+        <activity
+            android:name=".AddFoundItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FoundItemDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -75,6 +76,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- ===== SAFETY & EMERGENCY MODULE ===== -->
+        <activity
+            android:name=".SafetyEmergencyActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".EmergencyActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ViewAllReportsActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".MyReportsActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".UpdateEmergencyReportActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".TimetableListActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".AddTimetableActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

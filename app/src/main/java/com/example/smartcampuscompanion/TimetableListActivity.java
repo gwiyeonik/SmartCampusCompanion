@@ -6,34 +6,34 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.applandeo.materialcalendarview.CalendarView;
+import com.applandeo.materialcalendarview.EventDay;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class TimetableListActivity extends AppCompatActivity {
 
     private static final String TAG = "TimetableListActivity";
 
     private RecyclerView recyclerView;
-    private MaterialCalendarView calendarView;
+    private CalendarView calendarView;
     private TextView tvEmpty;
 
     private TimetableAdapter adapter;
     private List<TimetableModel> timetableList;
-
-    private HashSet<CalendarDay> classDays = new HashSet<>();
-
     private FirebaseFirestore db;
 
     @Override
@@ -41,53 +41,42 @@ public class TimetableListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable_list);
 
-        // 🔹 Views
+        // 🔹 Initialize Views
         calendarView = findViewById(R.id.calendarView);
         recyclerView = findViewById(R.id.recycler_view_timetable);
         tvEmpty = findViewById(R.id.tv_empty);
 
-        // 🔹 RecyclerView
+        // 🔹 Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         timetableList = new ArrayList<>();
         adapter = new TimetableAdapter(timetableList);
         recyclerView.setAdapter(adapter);
 
-        // 🔴 KEY UX FIX — hide list initially
+        // Hide list initially
         recyclerView.setVisibility(View.GONE);
         tvEmpty.setVisibility(View.GONE);
 
-        // 🔹 Firestore
         db = FirebaseFirestore.getInstance();
 
         // 🔹 Add Timetable button
         Button btnAdd = findViewById(R.id.btn_add_timetable);
         btnAdd.setOnClickListener(v ->
-                startActivity(new Intent(
-                        TimetableListActivity.this,
-                        AddTimetableActivity.class
-                ))
+                startActivity(new Intent(TimetableListActivity.this, AddTimetableActivity.class))
         );
 
-        // 🔹 Calendar date click → show + filter list
-        calendarView.setOnDateChangedListener((widget, date, selected) -> {
-            recyclerView.setVisibility(View.VISIBLE);
-            fetchTimetableByDay(getDayFromCalendarDay(date));
+        // 🔹 NEW LISTENER: Applandeo uses OnDayClickListener
+        calendarView.setOnDayClickListener(eventDay -> {
+            Calendar clickedDate = eventDay.getCalendar();
+
+            // Get the name of the day (e.g., "Monday")
+            String dayName = clickedDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+
+            Log.d(TAG, "Selected Day: " + dayName);
+            fetchTimetableByDay(dayName);
         });
 
-        // 🔹 Load dots only (NOT list)
+        // 🔹 Load indicators (dots) on the calendar
         fetchCalendarDots();
-    }
-
-    /**
-     * Convert CalendarDay → "Monday", "Tuesday", etc.
-     */
-    private String getDayFromCalendarDay(CalendarDay calendarDay) {
-        String day = calendarDay.getDate()
-                .getDayOfWeek()
-                .toString(); // MONDAY
-
-        return day.substring(0, 1).toUpperCase()
-                + day.substring(1).toLowerCase();
     }
 
     /**
@@ -104,51 +93,61 @@ public class TimetableListActivity extends AppCompatActivity {
     }
 
     /**
-     * Fetch ONLY calendar dots (clean UX)
+     * Fetch all timetables just to mark which days have classes with dots
      */
     private void fetchCalendarDots() {
         db.collection("timetables")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<EventDay> events = new ArrayList<>();
 
-                    classDays.clear();
-
-                    // TEMP: mark today if any timetable exists
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        classDays.add(CalendarDay.today());
+                    // For every timetable entry, we add a dot to that day of the week
+                    // Note: This marks the "Current Week" specifically.
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        String dayInDb = doc.getString("day"); // e.g., "Monday"
+                        if (dayInDb != null) {
+                            Calendar cal = getCalendarForDayName(dayInDb);
+                            // R.drawable.ic_dot is the file we created earlier
+                            events.add(new EventDay(cal, R.drawable.ic_dot));
+                        }
                     }
-
-                    calendarView.removeDecorators();
-                    calendarView.addDecorator(new EventDayDecorator(classDays));
+                    calendarView.setEvents(events);
                 })
-                .addOnFailureListener(e ->
-                        Log.e(TAG, "Error loading calendar dots", e)
-                );
+                .addOnFailureListener(e -> Log.e(TAG, "Error loading calendar dots", e));
     }
 
     /**
-     * Load timetables for selected day
+     * Helper to get a Calendar object for a specific day name in the current week
+     */
+    private Calendar getCalendarForDayName(String dayName) {
+        Calendar cal = Calendar.getInstance();
+        for (int i = 0; i < 7; i++) {
+            String currentDayName = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+            if (currentDayName.equalsIgnoreCase(dayName)) {
+                return (Calendar) cal.clone();
+            }
+            cal.add(Calendar.DATE, 1);
+        }
+        return Calendar.getInstance();
+    }
+
+    /**
+     * Load timetables from Firestore for the selected day string
      */
     private void fetchTimetableByDay(String day) {
         db.collection("timetables")
                 .whereEqualTo("day", day)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-
                     timetableList.clear();
-
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        TimetableModel model =
-                                document.toObject(TimetableModel.class);
+                        TimetableModel model = document.toObject(TimetableModel.class);
                         model.setDocumentId(document.getId());
                         timetableList.add(model);
                     }
-
                     adapter.notifyDataSetChanged();
                     toggleEmptyView();
                 })
-                .addOnFailureListener(e ->
-                        Log.e(TAG, "Error fetching timetable by day", e)
-                );
+                .addOnFailureListener(e -> Log.e(TAG, "Error fetching timetable", e));
     }
 }

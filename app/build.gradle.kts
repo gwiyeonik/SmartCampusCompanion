@@ -29,30 +29,34 @@ android {
 }
 
 dependencies {
-    // --- THIS IS THE FIX ---
-    // 1. Add the Firebase Bill of Materials (BoM).
-    // This manages all your Firebase library versions automatically.
+    // Firebase BoM - Manages all Firebase library versions
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
 
-    // 2. Declare Firebase dependencies WITHOUT versions.
-    // The BoM will provide the correct, compatible versions for you.
+    // Firebase dependencies (without versions)
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-    implementation("com.google.android.gms:play-services-location:21.0.1")
-    // --- END OF FIX ---
 
-    // Your other app dependencies
+    // Standard AndroidX and Material libraries
     implementation(libs.appcompat)
-    implementation(libs.material)
+    implementation(libs.material) // Your main Material library
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
-    // CalendarView dependency
-    implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
-    implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
+
+    // Google Maps SDK
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    // --- THIS IS THE FIX ---
+    // 1. REMOVE the old, conflicting calendar libraries.
+    // implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
+    // implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
+
+    // 2. ADD the new, modern, and compatible calendar library.
+    implementation("com.applandeo:material-calendar-view:1.9.2")
+    // --- END OF FIX ---
 
     // Testing dependencies
     testImplementation(libs.junit)

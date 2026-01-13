@@ -1,76 +1,37 @@
 package com.example.smartcampuscompanion;
 
 public class TimetableModel {
-
     private String documentId;
-
     private String subject;
     private String day;
     private String time;
     private String location;
 
-    // 🔒 GPS (hidden from UI)
-    private double latitude;
-    private double longitude;
-
-    // 🔹 REQUIRED empty constructor (Firestore)
+    // Empty constructor required for Firebase
     public TimetableModel() {}
 
-    // 🔹 Getters & Setters
-    public String getDocumentId() {
-        return documentId;
-    }
-
-    public void setDocumentId(String documentId) {
+    public TimetableModel(String documentId, String subject, String day, String time, String location) {
         this.documentId = documentId;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
         this.day = day;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
         this.time = time;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
         this.location = location;
     }
 
-    // 🔹 GPS (USED INTERNALLY ONLY)
-    public double getLatitude() {
-        return latitude;
-    }
+    // --- GETTERS ---
+    public String getDocumentId() { return documentId; }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
+    // This is the specific method the compiler is complaining about:
+    public String getSubject() { return subject; }
 
-    public double getLongitude() {
-        return longitude;
-    }
+    public String getDay() { return day; }
+    public String getTime() { return time; }
+    public String getLocation() { return location; }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
+    // --- SETTERS (Required if you are using Firebase's .toObject() method) ---
+    public void setDocumentId(String documentId) { this.documentId = documentId; }
+    public void setSubject(String subject) { this.subject = subject; }
+    public void setDay(String day) { this.day = day; }
+    public void setTime(String time) { this.time = time; }
+    public void setLocation(String location) { this.location = location; }
 }

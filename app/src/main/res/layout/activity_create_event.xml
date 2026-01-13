@@ -3,13 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#e0fcf2"
     tools:context=".CreateEventActivity">
 
     <ScrollView
+        android:id="@+id/update_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_create_event">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,11 +111,15 @@
             <EditText
                 android:id="@+id/et_event_description"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="164dp"
                 android:background="@android:color/white"
                 android:gravity="top"
                 android:hint="Enter description"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:inputType="textMultiLine"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -151,18 +158,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Coordinates"
+                android:text="Pin Location (Tap on map)"
                 android:textColor="#1B5E20"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="32dp"
-                android:orientation="horizontal">
-                <EditText android:id="@+id/et_latitude" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@android:color/white" android:hint="Lat" android:padding="12dp" android:layout_marginEnd="4dp" android:inputType="numberDecimal|numberSigned"/>
-                <EditText android:id="@+id/et_longitude" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:background="@android:color/white" android:hint="Lng" android:padding="12dp" android:layout_marginStart="4dp" android:inputType="numberDecimal|numberSigned"/>
-            </LinearLayout>
+                app:cardCornerRadius="12dp">
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/map_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 

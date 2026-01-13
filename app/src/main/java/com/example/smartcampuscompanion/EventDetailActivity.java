@@ -18,6 +18,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -70,6 +72,19 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     private MapView mapView;
     private com.google.android.gms.location.FusedLocationProviderClient fusedLocationClient;
     private GoogleMap googleMap;
+
+    private final ActivityResultLauncher<Intent> updateLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                // 2. If the result code is 99, it means the event was deleted
+                if (result.getResultCode() == 99) {
+                    finish(); // Close this Detail activity automatically
+                } else {
+                    // Otherwise, just refresh the data (in case they just updated it)
+                    loadEventDetails();
+                }
+            }
+    );
     // --- END OF FIX ---
 
     @Override
@@ -103,7 +118,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                 // Handle Chat navigation
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                new AlertDialog.Builder(this)
+                new androidx.appcompat.app.AlertDialog.Builder(this, R.style.MaterialAlertDialog_Delete)
                         .setTitle("Logout")
                         .setMessage("Are you sure you want to log out?")
                         .setPositiveButton("Logout", (dialog, which) -> {
@@ -172,9 +187,15 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         });
         btnOpenReview.setOnClickListener(v -> showAddReviewDialog());
         fabEditEvent.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CreateEventActivity.class);
+            // 1. Point the Intent to UpdateActivity
+            Intent intent = new Intent(this, UpdateActivity.class);
+
+            // 2. Pass the event ID
             intent.putExtra("EVENT_ID_TO_UPDATE", eventId);
-            startActivity(intent);
+
+            // 3. CRITICAL: Use launch() instead of startActivity()
+            // This allows this activity to "listen" for the delete signal (result code 99)
+            updateLauncher.launch(intent);
         });
 
     }
@@ -221,39 +242,65 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-
     private void loadEventDetails() {
+        // 1. Get the current user ID for permission checking
         String currentUserId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : "";
 
+        // 2. Find the "Image not available" TextView (ensure this ID is in your XML)
+        TextView tvNoImages = findViewById(R.id.tv_no_images);
+
+        // 3. Fetch data from the 'newsandinformation' collection
         db.collection("newsandinformation").document(eventId).get().addOnSuccessListener(doc -> {
-            if (doc.exists()) {
+            if (doc != null && doc.exists()) {
+
+                // --- SET BASIC TEXT ---
                 tvTitle.setText(doc.getString("title"));
                 tvDescription.setText(doc.getString("description"));
 
-                String creatorId = doc.getString("userId");
+                // --- CREATOR PERMISSIONS ---
+                String creatorId = doc.getString("organizerId");
                 if (currentUserId.equals(creatorId)) {
+                    // User IS the creator: show Edit button, hide Review button
                     creatorActionsLayout.setVisibility(View.VISIBLE);
-                    ivPlusIcon.setVisibility(View.GONE);
-                    btnOpenReview.setClickable(false);
+                    btnOpenReview.setVisibility(View.GONE);
                 } else {
+                    // User is NOT the creator: hide Edit button, show Review button
                     creatorActionsLayout.setVisibility(View.GONE);
-                    ivPlusIcon.setVisibility(View.VISIBLE);
-                    btnOpenReview.setClickable(true);
+                    btnOpenReview.setVisibility(View.VISIBLE);
                 }
 
-                Glide.with(this).load(doc.getString("imageUrl")).fitCenter().into(ivEventImage);
+                // --- MAIN BANNER IMAGE ---
+                // Using centerCrop to fill the banner space effectively
+                // Using fitCenter shows the entire image within the box
+                Glide.with(this)
+                        .load(doc.getString("imageUrl"))
+                        .into(ivEventImage);
 
-                // --- THIS IS THE FIX, PART 3 ---
-                // GALLERY - Update data, don't create new adapter
+
+                // --- ADDITIONAL IMAGES GALLERY ---
                 imageUrlList.clear();
                 Object imgsObject = doc.get("imagesUrl");
                 if (imgsObject instanceof Map) {
-                    Map<String, String> imgs = (Map<String, String>) imgsObject;
-                    imageUrlList.addAll(imgs.values());
+                    Map<String, String> imgsMap = (Map<String, String>) imgsObject;
+                    // Add only valid, non-empty URLs to the list
+                    for (String url : imgsMap.values()) {
+                        if (url != null && !url.trim().isEmpty()) {
+                            imageUrlList.add(url);
+                        }
+                    }
                 }
-                imagesAdapter.notifyDataSetChanged();
 
-                // REVIEWS - Update data, don't create new adapter
+                // Show list if images exist, otherwise show "not available" message
+                if (imageUrlList.isEmpty()) {
+                    if (tvNoImages != null) tvNoImages.setVisibility(View.VISIBLE);
+                    imagesRecyclerView.setVisibility(View.GONE);
+                } else {
+                    if (tvNoImages != null) tvNoImages.setVisibility(View.GONE);
+                    imagesRecyclerView.setVisibility(View.VISIBLE);
+                    imagesAdapter.notifyDataSetChanged();
+                }
+
+                // --- REVIEWS & COMMENTS ---
                 commentList.clear();
                 Object reviewObject = doc.get("review");
                 if (reviewObject instanceof List) {
@@ -261,29 +308,25 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                     commentList.addAll(reviews);
                 }
                 commentAdapter.notifyDataSetChanged();
-                // --- END OF FIX ---
 
+                // --- REGISTRATION LINK ---
                 String link = doc.getString("googleForm");
                 if (link != null && !link.isEmpty()) {
                     tvRegLink.setText("Click to Register");
-                    // Add the OnClickListener to make the link work
                     tvRegLink.setOnClickListener(v -> {
                         try {
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                             startActivity(browserIntent);
                         } catch (Exception e) {
-                            // This catches errors like a malformed URL
                             Toast.makeText(EventDetailActivity.this, "Could not open link", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "Could not open URL: " + link, e);
                         }
                     });
                 } else {
-                    // If there is no link, make sure it's not clickable
                     tvRegLink.setText("No registration link provided.");
                     tvRegLink.setOnClickListener(null);
                 }
 
-                // --- UPDATED LOCATION LOGIC ---
+                // --- LOCATION & MAP ---
                 Object locObject = doc.get("location");
                 if (locObject instanceof Map) {
                     Map<String, Object> loc = (Map<String, Object>) locObject;
@@ -291,17 +334,22 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                         lat = ((Number) loc.get("latitude")).doubleValue();
                         lng = ((Number) loc.get("longitude")).doubleValue();
 
+                        // Check if user is physically at the event
                         checkProximityToEvent();
 
-                        // If the map is already initialized, update its location
+                        // If Google Map is ready, move the camera to the event location
                         if (googleMap != null) {
                             updateMapLocation(lat, lng);
                         }
                     }
                 }
             }
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Error loading event details", e);
+            Toast.makeText(this, "Failed to load event details", Toast.LENGTH_SHORT).show();
         });
     }
+
 
     // --- NEW HELPER METHOD TO UPDATE THE MAP ---
     private void updateMapLocation(double latitude, double longitude) {
@@ -316,6 +364,9 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        if (eventId != null) {
+            loadEventDetails();
+        }
     }
 
     @Override

@@ -43,8 +43,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         Glide.with(context)
                 .load(imagePath) // Works for both Firebase Storage and fixed Drive links
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
+                .placeholder(android.R.color.darker_gray)
+                .error(android.R.color.holo_red_light)
                 .into(holder.eventImage);
 
         holder.itemView.setOnClickListener(v -> {

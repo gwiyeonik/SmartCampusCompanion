@@ -45,15 +45,16 @@
         android:textStyle="bold" />
 
     <!-- CALENDAR -->
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+    <com.applandeo.materialcalendarview.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_title"
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="12dp"
-        app:mcv_selectionColor="#3c7962"
-        app:mcv_showOtherDates="all" />
+        app:headerColor="#3c7962"
+        app:selectionColor="#3c7962"
+        app:type="one_day_picker" />
 
     <!-- EMPTY STATE -->
     <TextView

@@ -102,11 +102,16 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
+                <!-- Lost and Found -->
+
                 <LinearLayout
+                    android:id="@+id/btn_lost_found"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical">
 
                     <ImageView
@@ -127,10 +132,13 @@
 
                 <!-- Safety & Emergency -->
                 <LinearLayout
+                    android:id="@+id/btn_safety_emergency"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical">
 
                     <ImageView
@@ -153,31 +161,59 @@
 
             </LinearLayout>
 
-            <!-- Happening Section -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_wave" />
+
+                <TextView
+                    android:id="@+id/tv_user_greeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hi User!"
+                    android:textColor="#0d522c"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CCCCCC"
+                android:layout_marginVertical="8dp"/>
+
+            <!-- Urgent Items Section -->
             <TextView
                 android:id="@+id/tv_happening"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="HAPPENING"
+                android:text="URGENT ITEMS"
                 android:textColor="#1B5E20"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- THIS IS THE FIX: Replaced HorizontalScrollView with RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_happening"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="8dp"
-                android:clipToPadding="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_horizontal_event" />
-            <!-- END OF FIX -->
-
 
             <!-- This Week Section -->
             <TextView
@@ -186,23 +222,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="THIS WEEK"
+                android:text="THIS WEEK EVENT"
                 android:textColor="#1B5E20"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- THIS IS THE FIX: Replaced HorizontalScrollView with RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_this_week"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="164dp"
                 android:layout_marginTop="8dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_horizontal_event" />
-            <!-- END OF FIX -->
 
         </LinearLayout>
     </ScrollView>

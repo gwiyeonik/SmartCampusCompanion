@@ -4,19 +4,5 @@
     <string name="app_logo">Application Logo</string>
     <string name="create_event">Create Event</string>
 
-    <string-array name="event_types">
-        <item>Quiz</item>
-        <item>Test</item>
-        <item>Presentation</item>
-        <item>Final Exam</item>
-    </string-array>
-
-    <string-array name="event_priorities">
-        <item>Low</item>
-        <item>Medium</item>
-        <item>High</item>
-    </string-array>
-
-
 
 </resources>

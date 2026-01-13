@@ -2,22 +2,41 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.SmartCampusCompanion" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- THIS IS THE FIX: Set the status bar color -->
+        <item name="android:statusBarColor">@color/light_green_brand</item>
+        <!-- END OF FIX -->
+        <item name="android:windowBackground">@color/light_green_brand</item>
+        <!-- You can also set other theme colors if you want -->
+        <item name="colorPrimary">@color/dark_green_brand</item>
     </style>
 
     <style name="Theme.SmartCampusCompanion" parent="Base.Theme.SmartCampusCompanion" />
 
+    <!-- Your other styles like CircleImage and AlertDialogTheme are fine -->
     <style name="CircleImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
-    <color name="yellow">#FFC107</color>
-    <color name="light_gray">#D3D3D3</color>
-
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <!-- This sets the color for the dialog buttons (Positive, Negative, Neutral) -->
-        <item name="colorAccent">#1B5E20</item> <!-- Your app's dark green color -->
+        <item name="colorAccent">@color/dark_green_brand</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Green" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!-- This sets the color for the positive ("OK", "Yes") and negative ("No") buttons -->
+        <item name="colorOnSurface">@android:color/black</item> <!-- Text color for title and message -->
+        <item name="colorPrimary">@color/dark_green_brand</item> <!-- Color for positive button text -->
+        <item name="colorSecondary">@color/red</item>  <!-- Optional: Color for negative button text -->
+    </style>
+
+    <style name="MaterialAlertDialog.Delete" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- Sets the button text color to your dark green brand color -->
+        <item name="colorPrimary">@color/custom_green_brand</item>
+        <!-- Background of the dialog box (usually white in light mode) -->
+        <item name="colorSurface">@android:color/white</item>
+        <!-- Text color for title and message -->
+        <item name="colorOnSurface">@android:color/black</item>
     </style>
 
 </resources>
