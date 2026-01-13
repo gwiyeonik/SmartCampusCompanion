@@ -1,3 +1,4 @@
+package com.example.smartcampuscompanion;
 public class LostItem {
     // These variable names should match the fields you'll use in Firestore
     private String name;
